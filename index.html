@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Maintenance Request Console (Offline-ready)</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/icon.svg" />
+    <link rel="stylesheet" href="./styles.css" />
+    <meta name="theme-color" content="#0b5cff" />
+  </head>
+  <body>
+    <header>
+      <h1>Maintenance Request Console</h1>
+      <div class="status">
+        <span id="online-status" class="badge online">Online</span>
+        <button id="install-btn" hidden>Install App</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel">
+        <h2>1) Paste incoming message</h2>
+        <textarea id="raw-input" rows="8" placeholder="Paste WhatsApp message here..."></textarea>
+        <div class="row">
+          <button id="parse-btn">Parse</button>
+          <button id="clear-btn" class="secondary">Clear</button>
+        </div>
+        <p class="hint">Example:
+          <code>KCC492P/ZG1633
+YUSSUF MAALIM
+0722809260
+HASS PETROLEUM ELDORET DEPOT
+driver@company.com
+team: Nairobi
+hours: 48</code>
+        </p>
+      </section>
+
+      <section class="panel">
+        <h2>2) Verify / edit fields</h2>
+        <form id="fields-form">
+          <div class="grid-2">
+            <label>Registration(s)
+              <input id="reg" placeholder="KAX607C/ZD3849" />
+            </label>
+            <label>Driver Name
+              <input id="name" placeholder="Name" />
+            </label>
+            <label>Phone
+              <input id="phone" placeholder="+2547xxxxxxx" />
+            </label>
+            <label>Location/Company
+              <input id="company" placeholder="Company/Location" />
+            </label>
+            <label>Email(s)
+              <input id="email" placeholder="a@b.com, c@d.com" />
+            </label>
+            <label>Entry No. (optional)
+              <input id="entry_no" placeholder="12345" />
+            </label>
+            <label>Duration (hours, optional)
+              <input id="duration" type="number" placeholder="24 or 48" value="24" />
+            </label>
+            <label>Team (optional)
+              <input id="team" placeholder="Eldoret" value="Eldoret" />
+            </label>
+            <label>Notes (optional)
+              <input id="notes" placeholder="Short note" />
+            </label>
+          </div>
+        </form>
+        <div class="row">
+          <button id="save-btn">Save Entry</button>
+          <button id="pdf-btn" class="primary">Generate PDF</button>
+          <button id="email-btn">Send Email</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>3) Saved entries</h2>
+        <div class="row">
+          <button id="export-json">Export JSON</button>
+          <button id="export-csv">Export CSV</button>
+          <button id="clear-entries" class="danger">Clear All</button>
+        </div>
+        <table id="entries-table">
+          <thead>
+            <tr>
+              <th>Time</th><th>Reg</th><th>Name</th><th>Phone</th><th>Company</th><th>Email</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+
+    <footer>
+      <small>Offline-ready. Data stays in this browser (localStorage). Perfect for outages.</small>
+    </footer>
+
+    <!-- Libraries for PDF + QR (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="./app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+  </html>
